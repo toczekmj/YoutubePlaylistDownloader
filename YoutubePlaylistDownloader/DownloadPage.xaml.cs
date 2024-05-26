@@ -311,10 +311,8 @@ public partial class DownloadPage : UserControl, IDisposable, IDownload
                     var outputFileLoc = $"{GlobalConsts.TempFolderPath}{cleanFileNameWithID}.{FileType}";
                     var copyFileLoc = $"{SavePath}\\{cleanFileName}.{FileType}";
                     
-                    var taggedFileName = await GlobalConsts.TagFile(video, indexes[video], outputFileLoc, Playlist);
-                    var taggedFilePath = $"{SavePath}\\{taggedFileName}.{FileType}";
 
-                    if (GlobalConsts.DownloadSettings.SkipExisting && (File.Exists(copyFileLoc) || File.Exists(taggedFilePath)))
+                    if (GlobalConsts.DownloadSettings.SkipExisting && await ExtensionMethods.BulkFileExists(video, indexes[video], outputFileLoc, FileType, SavePath, Playlist))
                     {
                         CurrentStatus = string.Concat(FindResource("Skipping"));
                         CurrentTitle = video.Title;
